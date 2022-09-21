@@ -1,7 +1,7 @@
 # Hacker News
 
 ### Overview
-Hacker News Project - 
+Hacker News App connects to the Hacker News API. A search form is provided to fetch interested stories that references the input. The specific story can be navigated to. Server-side pagination is adopted here. useReducer hook and Context API are used for state management.
 
 ### How to start
 
