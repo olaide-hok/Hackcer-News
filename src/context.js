@@ -28,8 +28,15 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_LOADING })
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          "Access-Control-Allow-Origin": "http://localhost:3000"
+        },
+        mode: 'no-cors',
+      })
       const data = await response.json()
+      console.log(data);
       dispatch({type: SET_STORIES, payload: {hits: data.hits, nbPages: data.nbPages}})
       
     } catch (error) {
@@ -37,12 +44,17 @@ const AppProvider = ({ children }) => {
     }
   }
 
+  const removeStory = (id) => {
+    dispatch({ type: REMOVE_STORY, payload: id })
+  }
+
   useEffect(() => {
-    fetchStories(`${API_ENDPOINT}query=${state.query}&pages=${state.page}`)
+    fetchStories(`${API_ENDPOINT}query=${state.query}&page=${state.page}`)
   }, [])
 
   return <AppContext.Provider value={{
-    ...state
+    ...state,
+    removeStory
   }}>{children}</AppContext.Provider>
 }
 // make sure use
