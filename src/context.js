@@ -9,7 +9,7 @@ import {
 } from './actions'
 import reducer from './reducer'
 
-const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?'
+const API_ENDPOINT = 'http://hn.algolia.com/api/v1/search?'
 
 const initialState = {
   isLoading: true,
@@ -28,19 +28,12 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_LOADING })
 
     try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          "Access-Control-Allow-Origin": "http://localhost:3000"
-        },
-        mode: 'no-cors',
-      })
+      const response = await fetch(url)
       const data = await response.json()
-      console.log(data);
       dispatch({type: SET_STORIES, payload: {hits: data.hits, nbPages: data.nbPages}})
       
     } catch (error) {
-      
+      console.log(error)
     }
   }
 
@@ -57,7 +50,7 @@ const AppProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    fetchStories(`${API_ENDPOINT}query=${state.query}&page=${state.page}`)
+    fetchStories(`${API_ENDPOINT}query=${state.query}&tags=story&page=${state.page}`)
   }, [state.query, state.page])
 
   return <AppContext.Provider value={{
